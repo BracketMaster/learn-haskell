@@ -1,5 +1,5 @@
 The source files that go along with the open book
-[Real World Haskell](http://book.realworldhaskell.org/read/).
+http://book.realworldhaskell.org/read/.
 
 Each directory should contain a makefile, and thus,
 running make in each chapter-directory should build
