@@ -1,18 +1,28 @@
+-- ghci> :l question8.hs 
+-- [1 of 1] Compiling Main             ( question8.hs, interpreted )
+-- Ok, one module loaded.
+-- ghci> passed
+-- True
 data Tree a = Node a (Tree a) (Tree a)
             | Empty
               deriving (Show)
 
 tree_depth tree = max_depth 0 tree
-    where
-        max_depth acc Empty = acc
-        max_depth acc (Node _ Empty Empty) = acc + 1
-        max_depth acc (Node _ lhs Empty) = max_depth (acc + 1) lhs
-        max_depth acc (Node _ Empty rhs) = max_depth (acc + 1) rhs
-        max_depth acc (Node _ lhs rhs) = max height_lhs height_rhs
-            where
-                height_lhs = max_depth (acc + 1) lhs
-                height_rhs = max_depth (acc + 1) rhs
+    where max_depth acc Empty = acc
+          max_depth acc (Node _ lhs rhs) = max height_lhs height_rhs
+            where height_lhs = max_depth (acc + 1) lhs
+                  height_rhs = max_depth (acc + 1) rhs
 
+test_vector = [(tree7, 3),
+               (tree6, 3),
+               (tree5, 3),
+               (tree4, 3),
+               (tree3, 2),
+               (tree2, 2),
+               (tree1, 1)
+               ]
+tester (tree, expected_height) = (tree_depth tree) == expected_height
+passed = all tester test_vector
 
 tree7 = n1
     where
