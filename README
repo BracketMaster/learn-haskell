@@ -1,9 +1,15 @@
-The source files that go along with the open book
+A work in progress repository containing solutions
+to the real-word-haskell book sorted by chapter.
 http://book.realworldhaskell.org/read/.
 
+Each directory is a chapter and contains all the
+exercises for a given chapter. The directory may
+also contain some the the examples from that
+chapter.
+
 Some directories contain makefiles. Running ``make``
-should build and run the example program or the
-solution program to an exercise.
+in these directories should build and run the example
+program or the solution program to an exercise.
 
 Other directories just contain haskell sources. These
 haskell source can be loaded directly into a ghci
