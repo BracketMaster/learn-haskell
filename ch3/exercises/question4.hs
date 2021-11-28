@@ -1,3 +1,10 @@
+-- $ghci
+-- ghci> :l question4.hs 
+-- [1 of 1] Compiling Main             ( question4.hs, interpreted )
+-- Ok, one module loaded.
+-- ghci> pal [1,2,3]
+-- [1,2,3,3,2,1]
+
 -- attempt 1 : not efficient
 
 -- rev (x:xs) = rev xs ++ [x]

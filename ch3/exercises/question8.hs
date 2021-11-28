@@ -1,8 +1,10 @@
+-- $ghci
 -- ghci> :l question8.hs 
 -- [1 of 1] Compiling Main             ( question8.hs, interpreted )
 -- Ok, one module loaded.
 -- ghci> passed
 -- True
+
 data Tree a = Node a (Tree a) (Tree a)
             | Empty
               deriving (Show)
