@@ -1,9 +1,15 @@
 The source files that go along with the open book
 http://book.realworldhaskell.org/read/.
 
-Each directory should contain a makefile, and thus,
-running make in each chapter-directory should build
-the the work for that chapter and execute it.
+Some directories contain makefiles. Running ``make``
+should build and run the example program or the
+solution program to an exercise.
+
+Other directories just contain haskell sources. These
+haskell source can be loaded directly into a ghci
+session using ``:l file.hs``. Also, such files should
+contain instructional comments at the top on how to
+load them.
 
 Make sure that you have ghc(for the earlier chapters)
 and cabal installed(for the later chapters).
