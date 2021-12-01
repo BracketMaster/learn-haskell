@@ -6,6 +6,9 @@
 -- [[6],[4,5],[1,2,3]]
 
 sortListofLists list1 list2
-  | (length list1) >  (length list2) = GT
-  | (length list1) <  (length list2) = LT
-  | (length list1) == (length list2) = EQ
+  | (len1) >  (len2) = GT
+  | (len1) <  (len2) = LT
+  | (len1) == (len2) = EQ
+  where
+    len1 = length list1
+    len2 = length list2
