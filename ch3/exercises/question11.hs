@@ -1,3 +1,9 @@
+-- $ghci
+-- ghci> :l question11.hs 
+-- [1 of 1] Compiling Question11       ( question11.hs, interpreted )
+-- Ok, one module loaded.
+-- ghci> passed
+-- True
 module Question11 where
 
 data Direction = Left | Right | Straight deriving (Eq, Show)
@@ -44,3 +50,32 @@ path_directions list_of_points@(p1:p2:p3:_) =
         remaining_directions = path_directions $ tail list_of_points
 
 path_directions _ = []
+
+-- TESTS --
+-- a diagram of the following tests is in resources/question11.svg
+p0 = Point2 1 0
+p1 = Point2 0 1
+p2 = Point2 1 4
+p3 = Point2 3 4
+p4 = Point2 2 3
+p5 = Point2 2 2
+p6 = Point2 2 1
+p7 = Point2 3 3
+p8 = Point2 4 2
+p9 = Point2 2 0
+
+test_points = [p0, p1, p2, p3, p4, p5, p6, p7, p8,p9]
+results = path_directions test_points
+expected = [
+    Question11.Right,
+    Question11.Right,
+    Question11.Right,
+    Question11.Left,
+    Question11.Straight,
+    Question11.Left,
+    Question11.Right,
+    Question11.Right]
+
+test_vector = zip results expected
+tester (result, expected) = result == expected
+passed = all tester test_vector

@@ -43,6 +43,9 @@ direction_relative_to this_vec ref_vec
     where
         dir = det2 this_vec ref_vec
 
+-- TESTS --
+-- a diagram of the following tests is in resources/question10.svg
+
 path1a = Point2 1 0
 path1b = Point2 0 1
 path1c = Point2 1 4
