@@ -65,21 +65,17 @@ path_direction p1 p2 p3 =
 -- finally! What we've been waiting for!!
 
 -- we must first add two points to the convex hull to start off
-convex_hull points_on_hull@[] unevaluated_points@(p1:p2:rem) last_dir = 
-    convex_hull [p2, p1] rem Nothing
+convex_hull points_on_hull@[] unevaluated_points@(p1:p2:rem) = 
+    convex_hull [p2, p1] rem
 
 -- no more unevaluated points is the stopping condition
-convex_hull points_on_hull [] last_dir = points_on_hull
+convex_hull points_on_hull [] = points_on_hull
 
 -- then we run the convex hull algorithm at steady state
-convex_hull points_on_hull unevaluated_points last_dir = 
+convex_hull points_on_hull unevaluated_points = 
     if direction == Question12.Right
-        then convex_hull (tail points_on_hull) unevaluated_points (Just direction)
-        else if last_dir == Just Question12.Straight 
-            then convex_hull 
-                ([p3] ++ tail points_on_hull) (tail unevaluated_points) (Just direction)
-            else convex_hull 
-                ([p3] ++ points_on_hull) (tail unevaluated_points) (Just direction)
+        then convex_hull (tail points_on_hull) unevaluated_points
+        else convex_hull ([p3] ++ points_on_hull) (tail unevaluated_points)
     where
         direction = path_direction p1 p2 p3
         p1        = head $ tail points_on_hull
@@ -98,6 +94,6 @@ set1 = [
 starting_point = lowest_point set1
 angle_relative_to_starting_point = angle_relative_to starting_point
 sorted_points  = sortBy angle_relative_to_starting_point set1
-hull = convex_hull [] sorted_points Nothing
+hull = convex_hull [] sorted_points
 
-main = putStrLn $ show $ [(x,y) | (Point2 x y) <- sorted_points]
+main = putStrLn $ show $ [(x,y) | (Point2 x y) <- hull]
