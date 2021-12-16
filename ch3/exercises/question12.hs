@@ -1,3 +1,4 @@
+-- runhaskell question12,hs
 module Question12 where
 
 import Data.List
@@ -34,6 +35,15 @@ direction_relative_to this_vec ref_vec
     | dir == 0 = Question12.Straight
     where
         dir = det2 this_vec ref_vec
+-- if we come accross collinear points, we need to sort them by
+-- distance from the pivot point so that we achieve a consistent
+-- ordering
+dist (Point2 x1 y1) (Point2 x2 y2) = 
+    sqrt $ square (x2 - x1) + square (y2 - y1)
+    where square x = fromInteger x * fromInteger x
+
+compare_dist origin p1 p2 = 
+    (compare (dist origin p1) (dist origin p2))
 
 -- a function that takes two points, p1 and p2, with respect to
 -- a pivot point on a cartesian plane, and determines whether p2
@@ -41,7 +51,7 @@ direction_relative_to this_vec ref_vec
 angle_relative_to pivot_point p1 p2
     | dir == Question12.Right    = LT
     | dir == Question12.Left     = GT
-    | dir == Question12.Straight = EQ
+    | dir == Question12.Straight = compare_dist pivot_point p1 p2
     where dir = vec1 `direction_relative_to` vec2
           vec1 = makeVec pivot_point p1
           vec2 = makeVec pivot_point p2
@@ -65,35 +75,46 @@ path_direction p1 p2 p3 =
 -- finally! What we've been waiting for!!
 
 -- we must first add two points to the convex hull to start off
-convex_hull points_on_hull@[] unevaluated_points@(p1:p2:rem) = 
-    convex_hull [p2, p1] rem
+graham_scan points_on_hull@[] unevaluated_points@(p1:p2:rem) = 
+    graham_scan [p2, p1] rem
 
 -- no more unevaluated points is the stopping condition
-convex_hull points_on_hull [] = points_on_hull
+graham_scan points_on_hull [] = points_on_hull
 
 -- then we run the convex hull algorithm at steady state
-convex_hull points_on_hull unevaluated_points = 
+graham_scan points_on_hull unevaluated_points = 
     if direction == Question12.Right
-        then convex_hull (tail points_on_hull) unevaluated_points
-        else convex_hull ([p3] ++ points_on_hull) (tail unevaluated_points)
+        then graham_scan (tail points_on_hull) unevaluated_points
+        else graham_scan ([p3] ++ points_on_hull) (tail unevaluated_points)
     where
         direction = path_direction p1 p2 p3
         p1        = head $ tail points_on_hull
         p2        = head points_on_hull
         p3        = head unevaluated_points
 
+-- putting it all together
+convex_hull shape = graham_scan [] sorted_points
+    where sorted_points = sortBy angle_relative_to_starting_point shape
+          angle_relative_to_starting_point = angle_relative_to starting_point
+          starting_point = lowest_point shape
+
 -- TESTS --
--- a diagram with the following points can be 
--- found in resources/question12.svg
-set1 = [
+-- the following shapes can be found in resources/question12-shape1.svg
+-- and resources/question12-shape2.svg
+shape1 = [
     Point2 3 0, Point2 2 1, Point2 1 2,
     Point2 1 3, Point2 2 3, Point2 2 4,
     Point2 2 5, Point2 1 6, Point2 3 7,
     Point2 3 4, Point2 3 2]
 
-starting_point = lowest_point set1
-angle_relative_to_starting_point = angle_relative_to starting_point
-sorted_points  = sortBy angle_relative_to_starting_point set1
-hull = convex_hull [] sorted_points
+shape2 = [
+    Point2 15 0, Point2 12 1, Point2 12 3,
+    Point2 15 4, Point2 8 2,  Point2 8 7,
+    Point2 15 8, Point2 4 3,  Point2 4 11, 
+    Point2 15 12, Point2 0 4]
 
-main = putStrLn $ show $ [(x,y) | (Point2 x y) <- hull]
+stringify_point_list points = show $ [(x,y) | (Point2 x y) <- points]
+res = convex_hull shape1
+ans1 = "shape1 convex hull = " ++ stringify_point_list (convex_hull shape1)
+ans2 = "shape2 convex hull = " ++ stringify_point_list (convex_hull shape2)
+main = putStrLn $ ans1 ++ "\n" ++ ans2
